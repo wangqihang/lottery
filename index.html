@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>抽奖</title>
+	<style type="text/css">
+html {
+    font-size: 10px;
+    height: 100%;
+    overflow: hidden;
+    background-image: url(./img/2.jpg);
+    background-size: cover;
+}
+.title {
+    text-align: center;
+    text-shadow: 10px 10px 10px rgba(255, 200, 200, 1);
+    font-size: 4rem;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    letter-spacing: 1rem;
+    margin: 2rem 0;
+}
+
+.gb-wheel-container ul,
+.gb-wheel-container li,
+.gb-wheel-container p {
+    margin: 0;
+    padding: 0
+}
+
+.gb-wheel-container ul,
+.gb-wheel-container li {
+    list-style: none
+}
+
+.gb-wheel-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    transform: scale(1.4);
+    width: 30rem;
+    height: 30rem;
+    border-radius: 50%;
+    box-shadow: 0 2px 3px #333, 0 0 2px #000;
+    overflow: hidden;
+    position: relative;
+    top: 110px;
+}
+
+.gb-wheel-content {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    z-index: 2;
+    width: 28rem;
+    height: 28rem;
+    box-sizing: border-box;
+    border-radius: inherit;
+    background-clip: padding-box;
+    background: -webkit-radial-gradient(rgba(100, 100, 100, 0.1) 15%, transparent 16%) 0 0, -webkit-radial-gradient(rgba(100, 100, 100, 0.1) 15%, transparent 16%) 8px 8px, -webkit-radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%) 0 1px, -webkit-radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%) 8px 9px;
+    background: radial-gradient(rgba(100, 100, 100, 0.1) 15%, transparent 16%) 0 0, radial-gradient(rgba(100, 100, 100, 0.1) 15%, transparent 16%) 8px 8px, radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%) 0 1px, radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%) 8px 9px;
+    background-color: #ffcb3f;
+    background-size: 12px 14px
+}
+
+.gb-wheel-content:before {
+    content: ' ';
+    position: absolute;
+    left: -1rem;
+    top: -1rem;
+    z-index: -1;
+    width: 28rem;
+    height: 28rem;
+    border-radius: inherit;
+    border: 1rem solid #E44025;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2) inset
+}
+
+.gb-wheel-list {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: inherit;
+    height: inherit;
+    z-index: 9999
+}
+
+.gb-wheel-item {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    color: #e4370e;
+    font-weight: bold;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6)
+}
+
+.gb-wheel-icontent {
+    position: relative;
+    display: block;
+    padding-top: 1.5rem;
+    margin: 0 auto;
+    text-align: center;
+    -webkit-transform-origin: 50% 14rem;
+    -ms-transform-origin: 50% 14rem;
+    transform-origin: 50% 14rem
+}
+
+.gb-wheel-itext {
+    font-size: 2.2rem;
+    font-weight: bold;
+}
+
+.gb-wheel-iicon [class*=icono-] {
+    color: #e4370e
+}
+
+.gb-wheel-line {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: inherit;
+    height: inherit;
+    z-index: 99
+}
+
+.gb-wheel-litem {
+    position: absolute;
+    left: 14rem;
+    top: 0;
+    width: 1px;
+    height: 14rem;
+    background-color: rgba(228, 55, 14, 0.6);
+    overflow: hidden;
+    -webkit-transform-origin: 50% 14rem;
+    -ms-transform-origin: 50% 14rem;
+    transform-origin: 50% 14rem
+}
+
+.gb-wheel-btn {
+    position: absolute;
+    left: 11rem;
+    top: 11rem;
+    z-index: 400;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    color: #F4E9CC;
+    background-color: #E44025;
+    line-height: 8rem;
+    text-align: center;
+    font-size: 2rem;
+    text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.6), 0 0 5px 4px rgba(0, 0, 0, 0.2) inset;
+    text-decoration: none
+}
+
+a.gb-wheel-btn {
+    border-bottom: none
+}
+
+.gb-wheel-btn::after {
+    position: absolute;
+    content: '';
+    left: 2.5rem;
+    top: -1rem;
+    width: 3rem;
+    height: 3rem;
+    background-color: #E44025;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.6), 0 0 5px 4px rgba(0, 0, 0, 0.2) inset
+}
+
+.gb-wheel-btn.disabled,
+.gb-wheel-btn.disabled::after {
+    pointer-events: none;
+    background: #B07A7B;
+    color: #ccc
+}
+
+.gb-wheel-run {
+    -webkit-transition: transform 6s ease;
+    transition: transform 6s ease
+}
+
+@media only screen and (min-width: 320px) {
+    html {
+        font-size: 10px
+    }
+}
+
+@media only screen and (min-width: 375px) {
+    html {
+        font-size: 11.71875px
+    }
+}
+
+@media only screen and (min-width: 480px) {
+    html {
+        font-size: 15px
+    }
+}
+
+	</style>
+</head>
+<body>
+	<!-- <div style='position: absolute;top: 0;bottom: 0;left: 0;right: 0;margin:auto;'> -->
+		
+		<h1 class="title"><div style="background: url('./img/logo.png');background-size: cover;width: 4.5rem;height: 4.5rem;vertical-align: sub;;margin-right: 2rem;display: inline-block;"></div>xxx抽奖</h1>
+	<section class="gb-wheel-container" id="gbWheel">
+    <div class="gb-wheel-content gb-wheel-run" id="abc">
+        <ul class="gb-wheel-line"></ul>
+        <div class="gb-wheel-list"></div>
+    </div>
+    <a href="javascript:;" class="gb-wheel-btn" id="gbLottery">抽奖
+
+    	<!-- <div style="background: url('./img/logo.png');background-size: cover;width: 3rem;height: 3rem;left: 0;right: 0;margin: auto;top: 0;position: absolute;;z-index: 2;"></div> -->
+    </a>     
+</section>
+	<!-- </div> -->
+	
+</body>
+<script type="text/javascript">
+	(function() {
+    // 奖品配置
+    var awards = [
+            {'index': 0, 'text': '3018元' , 'name': 'icono-headphone', 'per': 0.05},
+            {'index': 1, 'text': '2818元' , 'name': 'icono-iphone', 'per': 0.15},
+            {'index': 2, 'text': '2518元' , 'name': 'icono-camera', 'per': 0.30},
+            {'index': 3, 'text': '2218元' , 'name': 'icono-cup', 'per': 0.30},	
+            {'index': 4, 'text': '2018元', 'name': 'icono-calendar', 'per': 0.15},
+            {'index': 5, 'text': '1818元', 'name': 'icono-calendar', 'per': 0.05},
+        ],
+        len = awards.length,
+        turnNum = 1 / len;  // 文字旋转 turn 值
+
+    var gbWheel = $('gbWheel'),
+        lineList = gbWheel.querySelector('ul.gb-wheel-line'),
+        itemList = gbWheel.querySelector('.gb-wheel-list'),
+        lineListHtml = [],
+        itemListHtml = [];
+
+    var transform = preTransform();
+
+    awards.forEach(function(v, i, a) {
+        // 分隔线
+        lineListHtml.push('<li class="gb-wheel-litem" style="' + transform + ': rotate('+ (i * turnNum + turnNum / 2) +'turn)"></li>');
+
+        // 奖项
+        itemListHtml.push('<div class="gb-wheel-item">');
+        itemListHtml.push('<div class="gb-wheel-icontent" style="' + transform + ': rotate('+ (i * turnNum) +'turn)">');
+        itemListHtml.push('<p class="gb-wheel-iicon">');
+        itemListHtml.push('<i class="'+v.name+'"></i>');
+        itemListHtml.push('</p>');
+        itemListHtml.push('<p class="gb-wheel-itext">');
+        itemListHtml.push(v.text);
+        itemListHtml.push('</p>');
+        itemListHtml.push('</div>');
+        itemListHtml.push('</div>');
+    });           
+
+    lineList.innerHTML = lineListHtml.join('');
+    itemList.innerHTML = itemListHtml.join('');
+
+    function $(id) {
+        return document.getElementById(id);
+    };
+
+    // 旋转
+    var i = 0;
+    var nowRand = 0;
+    function turn() {
+    	// document.getElementById("abc").style.transform = 'rotate(0deg)'; 
+    	// gbWheel.querySelector('.gb-wheel-content').style = transform + ': rotate('+ 0 +'deg)'; 
+    	let temp = nowRand;
+    	let flag = 0;
+		let rand = randomNum(0, 100);
+		let allPer = 0;
+    	for (let a in awards) {
+    		allPer += awards[a].per;
+    			console.log(awards[a].per * 100);
+    		if(rand <= allPer * 100) {
+    			flag = a;
+    			break;
+    		}
+    	}
+    	// nowRand = nowRand % 360 * 360 + 360 * 10 - (360 / len) * flag;
+    	nowRand = 360 - (360 / len) * flag;
+    	if(Math.abs(nowRand - temp) < 360) {
+    		nowRand += 360*10;
+    	}
+    	
+        // let rand = randomNum(3000,3600);
+        console.log(rand, flag, nowRand);
+        gbWheel.querySelector('.gb-wheel-content').style = transform + ': rotate('+ nowRand +'deg)';  
+    }
+    $('gbLottery').onclick = turn;
+
+    function randomNum(minNum,maxNum){
+	    switch(arguments.length){
+	        case 1: 
+	            return parseInt(Math.random()*minNum+1,10); 
+	        break; 
+	        case 2: 
+	            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
+	        break; 
+	            default: 
+	            	return 0; 
+	        break; 
+	    } 
+	} 
+
+    // transform兼容
+    function preTransform() {
+        var cssPrefix,
+        vendors = {
+          '': '',
+          Webkit: 'webkit',
+          Moz: '',
+          O: 'o',
+          ms: 'ms'
+        },
+        testEle = document.createElement('p'),
+        cssSupport = {};
+
+         // 嗅探特性
+        Object.keys(vendors).some(function(vendor) {
+            if (testEle.style[vendor + (vendor ? 'T' : 't') + 'ransform'] !== undefined) {
+              cssPrefix = vendor ? '-' + vendor.toLowerCase() + '-' : '';
+              return true;
+            }
+        });
+
+      function normalizeCss(name) {
+        name = name.toLowerCase();
+        return cssPrefix ? cssPrefix + name : name;
+      }
+
+      cssSupport = {
+        transform: normalizeCss('Transform'),
+      }
+
+      return cssSupport.transform;
+    }
+
+
+document.onkeydown=function(e){
+ if (e.keyCode == 32)
+          turn();
+         }; 
+    // window.onkeypress(function (e) {
+    //     if (e.keyCode == 32)
+    //       turn();
+    //  })
+
+
+}());
+</script>
+<script type="text/javascript">
+	function snow() {
+      //  1、定义一片雪花模板
+      var flake = document.createElement('div');
+      // 雪花字符 ❄❉❅❆✻✼❇❈❊✥✺
+      flake.innerHTML = '<img class="money" src="./img/1.png" />';
+      flake.style.cssText = 'position:absolute;color:#fff;';
+ 
+      //获取页面的高度 相当于雪花下落结束时Y轴的位置
+      var documentHieght = window.innerHeight;
+      //获取页面的宽度，利用这个数来算出，雪花开始时left的值
+      var documentWidth = window.innerWidth;
+ 
+      //定义生成一片雪花的毫秒数
+      var millisec = 60;
+      //2、设置第一个定时器，周期性定时器，每隔一段时间（millisec）生成一片雪花；
+      setInterval(function() { //页面加载之后，定时器就开始工作
+        //随机生成雪花下落 开始 时left的值，相当于开始时X轴的位置
+        var startLeft = Math.random() * documentWidth;
+ 
+        //随机生成雪花下落 结束 时left的值，相当于结束时X轴的位置
+        var endLeft = Math.random() * documentWidth;
+ 
+        //随机生成雪花大小
+        var flakeSize = 5 + 20 * Math.random();
+ 
+        //随机生成雪花下落持续时间
+        var durationTime = 4000 + 7000 * Math.random();
+ 
+        //随机生成雪花下落 开始 时的透明度
+        var startOpacity = 0.7 + 0.3 * Math.random();
+ 
+        //随机生成雪花下落 结束 时的透明度
+        var endOpacity = 0.2 + 0.2 * Math.random();
+ 
+        //克隆一个雪花模板
+        var cloneFlake = flake.cloneNode(true);
+ 
+        //第一次修改样式，定义克隆出来的雪花的样式
+        cloneFlake.style.cssText += `
+            left: ${startLeft}px;
+            opacity: ${startOpacity};
+            font-size:${flakeSize}px;
+            top:-25px;
+               transition:${durationTime}ms;
+           `;
+ 
+        //拼接到页面中
+        document.body.appendChild(cloneFlake);
+ 
+        //设置第二个定时器，一次性定时器，
+        //当第一个定时器生成雪花，并在页面上渲染出来后，修改雪花的样式，让雪花动起来；
+        setTimeout(function() {
+          //第二次修改样式
+          cloneFlake.style.cssText += `
+                left: ${endLeft}px;
+                top:${documentHieght}px;
+                opacity:${endOpacity};
+              `;
+ 
+          //4、设置第三个定时器，当雪花落下后，删除雪花。
+          setTimeout(function() {
+            cloneFlake.remove();
+          }, durationTime);
+        }, 0);
+ 
+      }, millisec);
+    }
+    snow();
+</script>
+</html>
